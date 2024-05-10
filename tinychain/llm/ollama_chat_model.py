@@ -1,8 +1,7 @@
 import ollama
 from tinychain.message.messages import HumanMessage
-from tinychain.runnable.runnable_manager import Runnable,RunableManager
 
-class OllamaChatbotAI(Runnable,RunableManager):
+class OllamaChatbotAI:
     def __init__(self,model_name:str="llama3") -> None:
         self.model_name = model_name
 

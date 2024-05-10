@@ -4,14 +4,12 @@ import re
 from typing import Tuple
 from typing import get_type_hints
 
-from rich.console import Console
 import inspect
 
 
 from tinychain.message.messages import BaseMessage
 from tinychain.constants import VARIALBE_EXTRACT_PATTERN
 
-console = Console()
 
 def get_variables(template):
     matches = re.findall(VARIALBE_EXTRACT_PATTERN, template)
@@ -32,9 +30,6 @@ def get_type_name(t):
 def function_to_json(func):
     signature = inspect.signature(func)
     type_hints = get_type_hints(func)
-
-    console.log(func.__doc__)
-    console.print(type_hints)
 
     function_info = {
         "name": func.__name__,

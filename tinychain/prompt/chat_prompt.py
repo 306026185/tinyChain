@@ -59,8 +59,32 @@ class ChatPromptTemplate(BaseChatPromptTemplate):
 
 
     def format_messages(self,**kwargs:Any)->List[BaseMessage]:
+    
         for msg in self.template:
-            msg = msg.content.format(**kwargs)
+            msg.content = msg.content.format(**kwargs)
             
 
         return self.template 
+
+
+
+class HumanMessagePromptTemplate:
+
+    @classmethod
+    def from_template(cls,prompt_str:str):
+        return HumanMessage(content=prompt_str)
+
+class AIMessagePromptTemplate:
+    @classmethod
+    def from_template(cls,prompt_str:str):
+        return AIMessage(content=prompt_str)
+    
+
+class SystemMessagePromptTemplate:
+    @classmethod
+    def from_template(cls,prompt_str:str):
+        return SystemMessage(content=prompt_str)
+    
+
+class ChatMessagePromptTemplate:
+    pass

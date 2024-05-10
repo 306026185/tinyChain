@@ -10,7 +10,7 @@ LikeMessageRepresentation = Union[str,Union[List[Union[Tuple[str,Any],BaseMessag
 
 class StringPromptTemplate():
     def __init__(self,template:str,
-                 input_variables:Optional[list[str]],
+                 input_variables:Optional[List[str]],
                  ) -> None:
         self.template = template
         self.input_variables = input_variables
@@ -27,6 +27,13 @@ class BasePromptTemplate(StringPromptTemplate,ABC):
             name:Optional[str]=None) -> None:
         self.template = template
         self.input_variables = input_variables
+        """
+        {
+            "name":{
+                "type":"string"
+            }
+        }
+        """
         self.input_types = input_types
         self.name = name
 

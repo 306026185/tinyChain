@@ -89,22 +89,7 @@ class BaseChatPromptTemplate(PromptTemplate):
     
         
 
-class HumanMessagePromptTemplate:
 
-    @staticmethod
-    def from_template(prompt_str:str):
-        return HumanMessage(content=prompt_str)
-
-class AIMessagePromptTemplate:
-    @staticmethod
-    def from_template(prompt_str:str):
-        return AIMessage(content=prompt_str)
-    
-
-class SystemMessagePromptTemplate:
-    @staticmethod
-    def from_template(prompt_str:str):
-        return SystemMessage(content=prompt_str)
 
 
 

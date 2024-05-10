@@ -1,12 +1,13 @@
 from typing import Union,Any,List,Dict
 from dataclasses import dataclass
-
+@dataclass
 class BaseMessage:
-
+    content:str
     def __init__(self,content:Union[str, List[Union[str, Dict]]], **kwargs: Any):
         self.content = content
 
 class SystemMessage(BaseMessage):
+    role:str
     def __init__(self,content:str) -> None:
         self.role = "system"
         self.content = content
