@@ -1,0 +1,10 @@
+{
+    "tools":[
+        {
+            "tool":"get_weather",
+            "tool_input":{
+                "city":"shenyang"
+            }
+        }
+    ]
+}
