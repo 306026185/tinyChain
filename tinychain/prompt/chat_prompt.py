@@ -84,7 +84,7 @@ class SystemMessagePromptTemplate:
     @classmethod
     def from_template(cls,prompt_str:str):
         return SystemMessage(content=prompt_str)
-    
+    # mxbai-embed-large:latest 
 
 class ChatMessagePromptTemplate:
     pass

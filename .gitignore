@@ -161,3 +161,4 @@ cython_debug/
 data/
 reference/
 prompt.txt
+tiny_db/
