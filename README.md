@@ -66,3 +66,7 @@ prompt.next = OllamaChatbotAI()
 runable_manager.invoke({"topic": "bears"})
 print(runable_manager.context)
 ```
+
+通过链表数据结构实现链式调用
+
+将状态机引入，实现 agent 的状态机

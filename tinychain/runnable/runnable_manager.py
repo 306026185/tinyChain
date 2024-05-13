@@ -1,8 +1,6 @@
 from typing import Any,Protocol
 from abc import ABC,abstractmethod
 
-
-
 class Runnable(ABC):
     def __init__(self) -> None:
         self.next = None
@@ -12,7 +10,7 @@ class Runnable(ABC):
         """invoke interface"""
 
         
-
+# linked list
 class RunableManager:
 
     def __init__(self) -> None:
