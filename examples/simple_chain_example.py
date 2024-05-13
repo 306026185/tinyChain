@@ -1,17 +1,13 @@
-
+from tinychain.prompt.chat_prompt import ChatPromptTemplate
 from tinychain.llm.ollama_chat_model import OllamaChatbotAI
-from tinychain.prompt.prompts import ChatPromptTemplate
+
 from tinychain.runnable.runnable_manager import RunableManager
-llm = OllamaChatbotAI(model_name="llama2")
 
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a world class technical documentation writer."),
-    ("user", "{input}")
-])
 
-print(prompt)
-exit(0)
+prompt = ChatPromptTemplate.from_template("tell me a joke about {topic}")
 
-chain = prompt | llm | llm
-
-chain.invoke({})
+runable_manager = RunableManager()
+runable_manager.head = prompt
+prompt.next = OllamaChatbotAI()
+runable_manager.invoke({"topic": "bears"})
+print(runable_manager.context)

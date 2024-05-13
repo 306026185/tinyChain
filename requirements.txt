@@ -1,2 +1,33 @@
 instructor
 Jinja2
+
+```
+template = "tell me a joke about {topic}"
+
+input_variable_dict = {"topic":"bears"}
+
+def process(tamplate,input_variable_dict):
+    #implement code
+result = process(template,input_variable_dict)
+print(result)
+tell me a joke about bears
+```
+请将 `#implement code` 用 python 代码实现
+
+
+```
+class Runnable(ABC):
+    def __init__(self) -> None:
+        self.next = None
+
+    @abstractmethod
+    def invoke(self,input,input_schema="json"):
+        """invoke interface"""
+
+```
+
+对于多继承
+```
+class ChatPromptTemplate(BaseChatPromptTemplate,PromptTemplate,Runnable):
+```
+如何把 ABC 类 Runable 初始化函数 __init__ 也执行，获

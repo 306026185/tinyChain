@@ -5,6 +5,7 @@ from typing import Optional,List,Dict,Any,Union,Tuple
 
 from tinychain.message.messages import BaseMessage
 from tinychain.utils import get_variables
+from tinychain.runnable.runnable_manager import Runnable
 
 LikeMessageRepresentation = Union[str,Union[List[Union[Tuple[str,Any],BaseMessage]]]]
 
@@ -12,11 +13,16 @@ class StringPromptTemplate():
     def __init__(self,template:str,
                  input_variables:Optional[List[str]],
                  ) -> None:
+        
+
         self.template = template
         self.input_variables = input_variables
 
-    def format(self,**kwargs):
-        return self.template.format(**kwargs)
+    def format(self,*args,**kwargs):
+        if args:
+            return self.template.format(**(args[0]))
+        else:
+            return self.template.format(**kwargs)
 
 class BasePromptTemplate(StringPromptTemplate,ABC):
 

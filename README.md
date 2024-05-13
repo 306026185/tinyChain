@@ -48,5 +48,21 @@ rsp = llm.invoke("how can langsmith help with testing?")
 - 模块化
 - 基础设施搭建
 
-## test
-测试模块
+## examples
+
+### 链式调用
+```python 
+from tinychain.prompt.chat_prompt import ChatPromptTemplate
+from tinychain.llm.ollama_chat_model import OllamaChatbotAI
+
+from tinychain.runnable.runnable_manager import RunableManager
+
+
+prompt = ChatPromptTemplate.from_template("tell me a joke about {topic}")
+
+runable_manager = RunableManager()
+runable_manager.head = prompt
+prompt.next = OllamaChatbotAI()
+runable_manager.invoke({"topic": "bears"})
+print(runable_manager.context)
+```
