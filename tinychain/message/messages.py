@@ -1,5 +1,7 @@
 from typing import Union,Any,List,Dict
 from dataclasses import dataclass
+
+
 @dataclass
 class BaseMessage:
     content:str
@@ -33,6 +35,15 @@ class ChatMessage(BaseMessage):
     def __init__(self,content:str,role:str) -> None:
         self.role = role
         self.content = content
+
+class ChatMessage(BaseMessage):
+    
+base_message_map:Dict[str,BaseMessage] = {
+    "human":HumanMessage,
+    "user":HumanMessage,
+    "ai":AIMessage,
+    "system":SystemMessage
+}
 
 
 

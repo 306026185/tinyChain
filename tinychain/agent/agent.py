@@ -1,4 +1,4 @@
-from typing import Protocol
+from typing import Protocol,List
 from dataclasses import dataclass
 
 
@@ -18,7 +18,7 @@ class AgentState(Protocol):
 
 
 class AgentContext(Protocol):
-    messages:list[str]
+    messages:List[str]
 
     def set_state(self,state:AgentState) -> None:
         ...
@@ -49,3 +49,9 @@ class Prompt(AgentState):
         # huminput
 
         self.context.set_state(Review(self.context))
+
+    def finalize(self):
+
+@dataclass
+class Review(AgentState):
+    context:AgentContext

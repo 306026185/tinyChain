@@ -100,3 +100,9 @@ class SystemMessagePromptTemplate:
 
 class ChatMessagePromptTemplate:
     pass
+
+
+class MessagesPlaceholder:
+    
+    def __init__(self,variable_name:str) -> None:
+        self.variable_name = variable_name

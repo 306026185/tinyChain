@@ -99,10 +99,7 @@ class ChatMessagePromptTemplate:
     def from_template(role:str,template:str):
         return BaseChatMessagePromptTemplate(role=role,prompt_str=template)
 
-class MessagesPlaceholder:
-    
-    def __init__(self,variable_name:str) -> None:
-        self.variable_name = variable_name
+
     
     
 
