@@ -37,7 +37,8 @@ class ChatMessage(BaseMessage):
         self.content = content
 
 class ChatMessage(BaseMessage):
-    
+    pass
+
 base_message_map:Dict[str,BaseMessage] = {
     "human":HumanMessage,
     "user":HumanMessage,

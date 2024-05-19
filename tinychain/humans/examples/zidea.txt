@@ -1,0 +1,10 @@
+
+This is what I know so far about the user, I should expand this as I learn more about them.
+
+First name: Zidea
+Last name: ?
+Gender: Male
+Age: ?
+Nationality: ?
+Occupation: AI developer
+Interests: coding,drawing and cooking
