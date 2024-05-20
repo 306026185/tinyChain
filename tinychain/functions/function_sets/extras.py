@@ -11,7 +11,7 @@ from tinychain.constants import (
     MESSAGE_CHATGPT_FUNCTION_MODEL,
     MESSAGE_CHATGPT_FUNCTION_SYSTEM_MESSAGE,
 )
-from tinychain.data_types import Message
+from tinychain.data_type import RecordMessage
 from tinychain.llm_api.llm_api_tools import create
 
 
@@ -28,8 +28,8 @@ def message_chatgpt(self, message: str):
     dummy_user_id = uuid.uuid4()
     dummy_agent_id = uuid.uuid4()
     message_sequence = [
-        Message(user_id=dummy_user_id, agent_id=dummy_agent_id, role="system", text=MESSAGE_CHATGPT_FUNCTION_SYSTEM_MESSAGE),
-        Message(user_id=dummy_user_id, agent_id=dummy_agent_id, role="user", text=str(message)),
+        RecordMessage(user_id=dummy_user_id, agent_id=dummy_agent_id, role="system", text=MESSAGE_CHATGPT_FUNCTION_SYSTEM_MESSAGE),
+        RecordMessage(user_id=dummy_user_id, agent_id=dummy_agent_id, role="user", text=str(message)),
     ]
     # TODO: this will error without an LLMConfig
     response = create(

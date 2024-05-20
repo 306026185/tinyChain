@@ -9,7 +9,11 @@ from tinychain.utils import printd,get_persona_text,get_human_text,load_all_pres
 from tinychain.constants import DEFAULT_PERSONA,DEFAULT_HUMAN,DEFAULT_PRESET
 from tinychain.local_llm.chat_completion_proxy import SUMMARIZE_SYSTEM_MESSAGE
 from tinychain.functions.functions import load_all_function_sets
+
+
+
 available_presets = load_all_presets()
+
 
 def generate_functions_json(preset_functions: List[str]):
     """
@@ -23,10 +27,6 @@ def generate_functions_json(preset_functions: List[str]):
     #   python_function: function
     # }
     available_functions = load_all_function_sets()
-
-    print(available_functions)
-    print('--'*50)
-    exit(0)
 
     # Filter down the function set based on what the preset requested
     preset_function_set = {}
@@ -43,16 +43,19 @@ def generate_functions_json(preset_functions: List[str]):
 def get_default_presets(user_id: uuid.UUID):
     """Add the default presets to the metadata store"""
 
-    preset_config = available_presets['tinychain_chat']
+    preset_config = available_presets['default_preset']
+    # printd(preset_config)
     preset_system_prompt = preset_config["system_prompt"]
 
     preset_function_set_names = preset_config["functions"]
-    print(preset_function_set_names)
+
+    # printd(preset_function_set_names)
 
     functions_schema = generate_functions_json(preset_function_set_names)
 
-    print(functions_schema)
-
+    # printd("[bold]functions_schema[/]")
+    # printd(functions_schema)
+    # printd("--"*50)
     # add default presets
     preset = Preset(
         user_id=user_id,
@@ -66,3 +69,10 @@ def get_default_presets(user_id: uuid.UUID):
     )
 
     return preset
+
+
+if __name__ == "__main__":
+    available_presets = load_all_presets()
+    # printd(available_presets)
+
+    get_default_presets(user_id=uuid.uuid4())

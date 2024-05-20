@@ -158,14 +158,11 @@ def load_all_presets():
     # Get the directory in which the script is located
     script_directory = os.path.dirname(os.path.abspath(__file__))
     # Construct the path pattern
-    printd(f"{script_directory=}")
     example_path_pattern = os.path.join(script_directory, "examples", "*.yaml")
     
-    printd(f"{example_path_pattern=}")
 
     # Listing all YAML files
     example_yaml_files = glob.glob(example_path_pattern)
-    console.print(example_yaml_files)
 
     ## Load the user-provided presets
     # ~/tinychain/presets/*.yaml
@@ -175,16 +172,12 @@ def load_all_presets():
         os.makedirs(user_presets_dir)
     # Construct the path pattern
 
-    console.print(":file:")
     user_path_pattern = os.path.join(user_presets_dir, "*.yaml")
-    console.print(user_path_pattern)
     # Listing all YAML files
     user_yaml_files = glob.glob(user_path_pattern)
-    console.print(user_yaml_files)
 
     # Pull from both examplesa and user-provided
     all_yaml_files = example_yaml_files + user_yaml_files
-    printd(f"{all_yaml_files=}")
     # Loading and creating a mapping from file name to YAML data
     all_yaml_data = {}
     for file_path in all_yaml_files:
@@ -193,8 +186,6 @@ def load_all_presets():
         data = load_yaml_file(file_path)
         all_yaml_data[base_name] = data
 
-    console.print(all_yaml_data)
-    exit(0)
     return all_yaml_data
 
 

@@ -3,7 +3,7 @@ import json
 import math
 from typing import Optional
 
-from tinychain.agent import Agent
+from tinychain.agent.agent import Agent
 from tinychain.constants import (
     JSON_ENSURE_ASCII,
     MAX_PAUSE_HEARTBEATS,

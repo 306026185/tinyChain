@@ -1,6 +1,8 @@
 import uuid
 import typer
 
+from typing import Tuple
+
 from rich.console import Console
 
 from tinychain.utils import printd
@@ -8,15 +10,17 @@ from tinychain.config import TinyChainConfig
 from tinychain.data_type import EmbeddingConfig,LLMConfig,Preset
 from tinychain.agent.agent import Agent
 from tinychain.presets.presets import get_default_presets
+from tinychain.interface import CLIInterface as interface
 
 console = Console()
 
-# TODO 放置在某一个文件
+# TODO 放置在某一个 config 文件，load 方法来加载
 config = {
     "context_window": 8192,
-    "model_endpoint_type": "ollama",
+    "model_endpoint_type": "ollama", 
     "model_endpoint": "http://localhost:11434",
     "model": "llama3:latest",
+    # embedding
     "embedding_endpoint_type": "ollama",
     "embedding_endpoint": "http://localhost:11434",
     "embedding_model": "nomic-embed-text:latest",
@@ -25,9 +29,9 @@ config = {
 }
 
 
-def set_config_with_dict(new_config: dict) -> (TinyChainConfig, bool):
+def set_config_with_dict(new_config: dict) -> Tuple[TinyChainConfig, bool]:
 
-    old_config = TinyChainConfig.load()
+    old_config = TinyChainConfig()
     modified = False
     for k, v in vars(old_config).items():
         if k in new_config:
@@ -83,8 +87,11 @@ def set_config_with_dict(new_config: dict) -> (TinyChainConfig, bool):
     return (old_config, modified)
 
 def main():
+    # 设置 terminal 为 True 表示应用 console application
     terminal = True
+
     printd("JSON config file downloaded successfully.")
+    # 加载一个字典(dict)类型配置数据
     new_config, config_was_modified = set_config_with_dict(config)
     console.print(new_config,config_was_modified)
 
@@ -124,51 +131,25 @@ def main():
 
 
     preset_obj = get_default_presets(user_id=uuid.uuid4(),)
-    exit(0)
 
-
-
-    ms.get_preset(name=preset if preset else config.preset, user_id=user.id)
-    human_obj = ms.get_human(human, user.id)
-    persona_obj = ms.get_persona(persona, user.id)
-    if preset_obj is None:
-        # create preset records in metadata store
-        from memgpt.presets.presets import add_default_presets
-
-        add_default_presets(user.id, ms)
-        # try again
-        preset_obj = ms.get_preset(name=preset if preset else config.preset, user_id=user.id)
-        if preset_obj is None:
-            typer.secho("Couldn't find presets in database, please run `memgpt configure`", fg=typer.colors.RED)
-            sys.exit(1)
-    if human_obj is None:
-        typer.secho("Couldn't find human {human} in database, please run `memgpt add human`", fg=typer.colors.RED)
-    if persona_obj is None:
-        typer.secho("Couldn't find persona {persona} in database, please run `memgpt add persona`", fg=typer.colors.RED)
-
-    # Overwrite fields in the preset if they were specified
-    preset_obj.human = ms.get_human(human, user.id).text
-    preset_obj.persona = ms.get_persona(persona, user.id).text
 
     typer.secho(f"->  🤖 Using persona profile: '{preset_obj.persona_name}'", fg=typer.colors.WHITE)
     typer.secho(f"->  🧑 Using human profile: '{preset_obj.human_name}'", fg=typer.colors.WHITE)
 
-    preset_obj = Preset(
-        name="preset",
-        id=uuid.uuid4(),
-        description= ""
-    )
-
-    tinchain_agent = Agent(
+    user_id = uuid.uuid4()
+  
+    tinychain_agent = Agent(
         interface=interface(),
+        agent_state = 
         name="test_agent",
-        created_by=datetime.new,
+        created_by=user_id,
         preset=preset_obj,
-        llm_config=new_config,
-        embedding_config=embedding_config,
+        llm_config=new_config.default_llm_config,
+        embedding_config=new_config.default_embedding_config,
         # gpt-3.5-turbo tends to omit inner monologue, relax this requirement for now
-        first_message_verify_mono=True if (model is not None and "gpt-4" in model) else False,
+        first_message_verify_mono=False,
     )
+    tinychain_agent.step(user_message="write hello world in python")
 if __name__ == "__main__":
     main()
 

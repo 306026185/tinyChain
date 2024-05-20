@@ -37,8 +37,43 @@ class Agent:
         messages_total: Optional[int] = None, 
         first_message_verify_mono: bool = True, 
         ) -> None:
-        pass
+        
+        if preset is not None:
+            assert agent_state is None, "Can create an agent from a Preset or AgentState (but both were provided)"
+            assert created_by is not None, "Must provide created_by field when creating an Agent from a Preset"
+            assert llm_config is not None, "Must provide llm_config field when creating an Agent from a Preset"
+            assert embedding_config is not None, "Must provide embedding_config field when creating an Agent from a Preset"
 
+            # if agent_state is also provided, override any preset values
+            init_agent_state = AgentState(
+                name=name,
+                user_id=created_by,
+                persona=preset.persona_name,
+                human=preset.human_name,
+                llm_config=llm_config,
+                embedding_config=embedding_config,
+                preset=preset.name,  # TODO link via preset.id instead of name?
+                state={
+                    "persona": preset.persona,
+                    "human": preset.human,
+                    "system": preset.system,
+                    "functions": preset.functions_schema,
+                    "messages": None,
+                },
+            )
+
+        elif agent_state is not None:
+            assert preset is None, "Can create an agent from a Preset or AgentState (but both were provided)"
+            assert agent_state.state is not None and agent_state.state != {}, "AgentState.state cannot be empty"
+
+            # Assume the agent_state passed in is formatted correctly
+            init_agent_state = agent_state
+
+        else:
+            raise ValueError("Both Preset and AgentState were null (must provide one or the other)")
+
+        self.agent_state = init_agent_state
+        
     def step(
         self,
         user_message: Union[RecordMessage, str],  # NOTE: should be json.dump(dict)
@@ -176,12 +211,13 @@ class Agent:
             printd(f"step() failed\nuser_message = {user_message}\nerror = {e}")
 
             # If we got a context alert, try trimming the messages length, then try again
-            if is_context_overflow_error(e):
-                # A separate API call to run a summarizer
-                self.summarize_messages_inplace()
 
-                # Try step again
-                return self.step(user_message, first_message=first_message, return_dicts=return_dicts)
-            else:
-                printd(f"step() failed with an unrecognized exception: '{str(e)}'")
-                raise e
+            # if is_context_overflow_error(e):
+            #     # A separate API call to run a summarizer
+            #     self.summarize_messages_inplace()
+
+            #     # Try step again
+            #     return self.step(user_message, first_message=first_message, return_dicts=return_dicts)
+            # else:
+            #     printd(f"step() failed with an unrecognized exception: '{str(e)}'")
+            #     raise e

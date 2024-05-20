@@ -328,6 +328,7 @@ class AgentState:
         state: Optional[dict] = None,
         created_at: Optional[datetime] = None,
     ):
+        
         if id is None:
             self.id = uuid.uuid4()
         else:

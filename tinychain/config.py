@@ -51,7 +51,7 @@ class TinyChainConfig:
     archival_storage_uri: str = None  # TODO: eventually allow external vector DB
 
     # database configs: recall
-    recall_storage_type: str = "sqlite"  # local, db
+    recall_storage_type: str = "tinydb"  # local, db
     recall_storage_path: str = TINYCHAIN_DIR
     recall_storage_uri: str = None  # TODO: eventually allow external vector DB
 
@@ -297,3 +297,6 @@ class TinyChainConfig:
         for folder in folders:
             if not os.path.exists(os.path.join(TINYCHAIN_DIR, folder)):
                 os.makedirs(os.path.join(TINYCHAIN_DIR, folder))
+
+if __name__ == "__main__":
+    config = TinyChainConfig()

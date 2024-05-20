@@ -21,7 +21,6 @@ def load_function_set(module: ModuleType) -> dict:
     function_dict = {}
 
     for attr_name in dir(module):
-        print(attr_name)
         # Get the attribute
         attr = getattr(module, attr_name)
 
@@ -30,10 +29,7 @@ def load_function_set(module: ModuleType) -> dict:
             if attr_name in function_dict:
                 raise ValueError(f"Found a duplicate of function name '{attr_name}'")
 
-            print("--"*50)
-            print(attr)
-            print("--"*50)
-            exit(0)
+           
             generated_schema = generate_schema(attr)
             function_dict[attr_name] = {
                 "python_function": attr,
@@ -72,8 +68,7 @@ def load_all_function_sets(
 
     # Add user_scripts_dir to sys.path
 
-    printd(f"{USER_FUNCTIONS_DIR=}")
-
+    # printd(f"{USER_FUNCTIONS_DIR=}")
 
     if USER_FUNCTIONS_DIR not in sys.path:
         sys.path.append(USER_FUNCTIONS_DIR)
@@ -120,13 +115,13 @@ def load_all_function_sets(
 
             try:
                 # Load the function set
-                print(module)
                 function_set = load_function_set(module)
                 # Add the metadata tags
                 for k, v in function_set.items():
                     # print(function_set)
                     v["tags"] = tags
                 schemas_and_functions[module_name] = function_set
+                printd(schemas_and_functions)
             except ValueError as e:
                 err = f"Error loading function set '{module_name}': {e}"
                 printd(err)

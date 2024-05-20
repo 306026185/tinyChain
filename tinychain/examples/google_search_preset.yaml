@@ -1,4 +1,4 @@
-system_prompt: "memgpt_chat"
+system_prompt: "tinychain_chat"
 functions:
   - "send_message"
   - "pause_heartbeats"
