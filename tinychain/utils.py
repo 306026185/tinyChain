@@ -6,11 +6,20 @@ import re
 from typing import Tuple
 from typing import get_type_hints
 
+import glob
+import yaml
+
+
 import inspect
 import tiktoken
 
 from tinychain.message.messages import BaseMessage
-from tinychain.constants import VARIALBE_EXTRACT_PATTERN,TINYCHAIN_DIR,CORE_MEMORY_PERSONA_CHAR_LIMIT,CORE_MEMORY_HUMAN_CHAR_LIMIT
+from tinychain.constants import (
+    VARIALBE_EXTRACT_PATTERN,
+    TINYCHAIN_DIR,
+    CORE_MEMORY_PERSONA_CHAR_LIMIT,
+    CORE_MEMORY_HUMAN_CHAR_LIMIT
+    )
 from tinychain.model.chat_completion_response import ChatCompletionResponse
 
 from rich.console import Console
@@ -132,6 +141,63 @@ def get_human_text(name: str):
             # printd(open(file_path, "r").read().strip())
             return open(file_path, "r").read().strip()
         
+def load_yaml_file(file_path):
+    """
+    Load a YAML file and return the data.
+
+    :param file_path: Path to the YAML file.
+    :return: Data from the YAML file.
+    """
+    with open(file_path, "r", encoding="utf-8") as file:
+        return yaml.safe_load(file)
+
+def load_all_presets():
+    """Load all the preset configs in the examples directory"""
+
+    ## Load the examples
+    # Get the directory in which the script is located
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+    # Construct the path pattern
+    printd(f"{script_directory=}")
+    example_path_pattern = os.path.join(script_directory, "examples", "*.yaml")
+    
+    printd(f"{example_path_pattern=}")
+
+    # Listing all YAML files
+    example_yaml_files = glob.glob(example_path_pattern)
+    console.print(example_yaml_files)
+
+    ## Load the user-provided presets
+    # ~/tinychain/presets/*.yaml
+    user_presets_dir = os.path.join(TINYCHAIN_DIR, "presets")
+    # Create directory if it doesn't exist
+    if not os.path.exists(user_presets_dir):
+        os.makedirs(user_presets_dir)
+    # Construct the path pattern
+
+    console.print(":file:")
+    user_path_pattern = os.path.join(user_presets_dir, "*.yaml")
+    console.print(user_path_pattern)
+    # Listing all YAML files
+    user_yaml_files = glob.glob(user_path_pattern)
+    console.print(user_yaml_files)
+
+    # Pull from both examplesa and user-provided
+    all_yaml_files = example_yaml_files + user_yaml_files
+    printd(f"{all_yaml_files=}")
+    # Loading and creating a mapping from file name to YAML data
+    all_yaml_data = {}
+    for file_path in all_yaml_files:
+        # Extracting the base file name without the '.yaml' extension
+        base_name = os.path.splitext(os.path.basename(file_path))[0]
+        data = load_yaml_file(file_path)
+        all_yaml_data[base_name] = data
+
+    console.print(all_yaml_data)
+    exit(0)
+    return all_yaml_data
+
+
 def verify_first_message_correctness(
     response: ChatCompletionResponse, require_send_message: bool = True, require_monologue: bool = False
 ) -> bool:
@@ -182,3 +248,6 @@ def verify_first_message_correctness(
 if __name__ == "__main__":
     get_human_text("zidea.txt")
     get_persona_text("tinychain_starter")
+
+
+    load_all_presets()

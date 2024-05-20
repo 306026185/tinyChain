@@ -2,6 +2,8 @@ import json
 from typing import List, Optional
 from abc import ABC, abstractmethod
 
+from tinychain.data_type import RecordMessage
+
 class AgentInterface(ABC):
 
     @abstractmethod

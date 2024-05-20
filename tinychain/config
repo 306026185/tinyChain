@@ -1,0 +1,36 @@
+[defaults]
+preset = tinychain_chat
+persona = tinychain_starter
+human = zidea
+
+[model]
+model = llama3:latest
+model_endpoint = http://localhost:11434
+model_endpoint_type = ollama
+context_window = 8192
+
+[embedding]
+embedding_endpoint_type = ollama
+embedding_endpoint = http://localhost:11434
+embedding_model = nomic-embed-text:latest
+embedding_dim = 1024
+embedding_chunk_size = 300
+
+[archival_storage]
+type = tinydb
+path = /home/user/tinyChain/tinychain/tinydb
+
+[recall_storage]
+type = sqlite
+path = /home/user/tinyChain/tinychain
+
+[metadata_storage]
+type = sqlite
+path = /home/user/tinyChain/tinychain
+
+[version]
+tinychain_version = 1.0.0
+
+[client]
+anon_clientid = 000000000000000000003cecef897a03
+
