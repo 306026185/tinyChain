@@ -66,9 +66,6 @@ def get_chat_completion(
 
     chat_completion_result = llm_wrapper.output_to_chat_completion_response(result)
 
-    printd(result)
-    printd(chat_completion_result)
-
     if not ("prompt_tokens" in usage and "completion_tokens" in usage and "total_tokens" in usage):
         raise
 

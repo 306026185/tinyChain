@@ -130,7 +130,6 @@ def create(
 
     printd(f"Using model {llm_config.model_endpoint_type}, endpoint: {llm_config.model_endpoint}")
 
-
     if function_call and not functions:
         printd("unsetting function_call because functions is None")
         function_call = None
