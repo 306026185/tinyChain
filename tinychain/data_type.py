@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field, Json
 import numpy as np
 
 from tinychain.constants import MAX_EMBEDDING_DIM,DEFAULT_HUMAN,DEFAULT_PERSONA
-from tinychain.utils import get_human_text,get_persona_text
+from tinychain.utils import get_human_text,get_persona_text,get_utc_time,create_uuid_from_string,printd
 
 
 LLM_MAX_TOKENS = {
@@ -46,6 +46,65 @@ class ToolCall(object):
             "function": self.function,
         }
 
+# 关于 RecordMessage 是一个
+
+class Passage(Record):
+    """A passage is a single unit of memory, and a standard format accross all storage backends.
+
+    It is a string of text with an assoidciated embedding.
+    """
+
+    def __init__(
+        self,
+        text: str,
+        user_id: Optional[uuid.UUID] = None,
+        agent_id: Optional[uuid.UUID] = None,  # set if contained in agent memory
+        embedding: Optional[np.ndarray] = None,
+        embedding_dim: Optional[int] = None,
+        embedding_model: Optional[str] = None,
+        data_source: Optional[str] = None,  # None if created by agent
+        doc_id: Optional[uuid.UUID] = None,
+        id: Optional[uuid.UUID] = None,
+        metadata_: Optional[dict] = {},
+        created_at: Optional[datetime] = None,
+    ):
+        if id is None:
+            # by default, generate ID as a hash of the text (avoid duplicates)
+            # TODO: use source-id instead?
+            if agent_id:
+                self.id = create_uuid_from_string("".join([text, str(agent_id), str(user_id)]))
+            else:
+                self.id = create_uuid_from_string("".join([text, str(user_id)]))
+        else:
+            self.id = id
+        super().__init__(self.id)
+        self.user_id = user_id
+        self.agent_id = agent_id
+        self.text = text
+        self.data_source = data_source
+        self.doc_id = doc_id
+        self.metadata_ = metadata_
+
+        # pad and store embeddings
+        if isinstance(embedding, list):
+            embedding = np.array(embedding)
+        self.embedding = (
+            np.pad(embedding, (0, MAX_EMBEDDING_DIM - embedding.shape[0]), mode="constant").tolist() if embedding is not None else None
+        )
+        self.embedding_dim = embedding_dim
+        self.embedding_model = embedding_model
+
+        self.created_at = created_at if created_at is not None else get_utc_time()
+
+        if self.embedding is not None:
+            assert self.embedding_dim, f"Must specify embedding_dim if providing an embedding"
+            assert self.embedding_model, f"Must specify embedding_model if providing an embedding"
+            assert len(self.embedding) == MAX_EMBEDDING_DIM, f"Embedding must be of length {MAX_EMBEDDING_DIM}"
+
+        assert isinstance(self.user_id, uuid.UUID), f"UUID {self.user_id} must be a UUID type"
+        assert isinstance(self.id, uuid.UUID), f"UUID {self.id} must be a UUID type"
+        assert not agent_id or isinstance(self.agent_id, uuid.UUID), f"UUID {self.agent_id} must be a UUID type"
+        assert not doc_id or isinstance(self.doc_id, uuid.UUID), f"UUID {self.doc_id} must be a UUID type"
 
 
 class RecordMessage(Record):

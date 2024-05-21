@@ -14,7 +14,20 @@ DEFAULT_PRESET = "tinychain_chat"
 
 MAX_EMBEDDING_DIM = 4096 
 
+TOOL_CALL_ID_MAX_LEN = 29
+
 FIRST_MESSAGE_ATTEMPTS = 10
+
+INITIAL_BOOT_MESSAGE = "Boot sequence complete. Persona activated."
+INITIAL_BOOT_MESSAGE_SEND_MESSAGE_THOUGHT = "Bootup sequence complete. Persona activated. Testing messaging functionality."
+STARTUP_QUOTES = [
+    "I think, therefore I am.",
+    "All those moments will be lost in time, like tears in rain.",
+    "More human than human is our motto.",
+]
+INITIAL_BOOT_MESSAGE_SEND_MESSAGE_FIRST_MSG = STARTUP_QUOTES[2]
+
+
 JSON_LOADS_STRICT = False
 MESSAGE_SUMMARY_WARNING_FRAC = 0.75
 MESSAGE_SUMMARY_TRUNC_TOKEN_FRAC = 0.75
